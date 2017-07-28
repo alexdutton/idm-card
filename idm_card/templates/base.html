@@ -1,0 +1,16 @@
+{% extends "idm_brand/base.html" %}
+
+{% block site_name %}Card Management{% endblock %}
+
+{% block nav %}
+<ul class="pure-menu-list">
+    {% if user.is_authenticated %}
+    <li class="pure-menu-item"><a class="pure-menu-link" href="#">Log out</a></li>
+    {% else %}
+    <li class="pure-menu-item"><a class="pure-menu-link" href="{% url "oidc-login" %}">Log in</a></li>
+    {% endif %}
+<hr>
+    <li class="pure-menu-item"><a class="pure-menu-link" href="{{ IDM_CORE_URL }}">Identity self-service</a></li>
+    <li class="pure-menu-item"><a class="pure-menu-link" href="{{ IDM_AUTH_URL }}">Account management</a></li>
+</ul>
+{% endblock %}

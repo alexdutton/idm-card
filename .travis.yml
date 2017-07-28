@@ -1,0 +1,17 @@
+language: python
+services:
+  - postgresql
+addons:
+  postgresql: "9.4"
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+install:
+  - pip install -r requirements.txt
+  - pip install codecov
+env:
+  - DJANGO_SETTINGS_MODULE=idm_card.tests.settings DJANGO_ALLOWED_HOSTS=localhost DJANGO_SECRET_KEY=secret-key-for-travis
+script: PYTHONPATH=. coverage run --source=. `which django-admin.py` test
+after_success:
+  - codecov
