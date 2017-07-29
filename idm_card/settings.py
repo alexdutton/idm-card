@@ -95,6 +95,7 @@ TEMPLATES = [
             'context_processors': (
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.static',
+                'django.template.context_processors.request',
                 'idm_card.context_processors.idm_card',
             ),
         },
@@ -150,47 +151,17 @@ EMAIL_BACKEND = os.environ.get('DJANGO_EMAIL_BACKEND', 'django.core.mail.backend
 
 IDM_APPLICATION_ID = '4ff517c5-532f-42ee-afb1-a5d3da2f61d5'
 
-from django.conf import global_settings
-
-PASSWORD_HASHERS = global_settings.PASSWORD_HASHERS + ['idm_auth.kerberos.hashers.KerberosHasher']
-
-DEFAULT_REALM = os.environ.get('DEFAULT_REALM', 'EXAMPLE.COM')
-KADMIN_PRINCIPAL_NAME = os.environ.get('KADMIN_PRINCIPAL_NAME')
 CLIENT_PRINCIPAL_NAME = os.environ.get('CLIENT_PRINCIPAL_NAME')
 
 
-AUTH_PASSWORD_VALIDATORS = [{
-    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-}, {
-    'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    'OPTIONS': {
-        'min_length': 10,
-    }
-}, {
-    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-}, {
-    'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-}, {
-    'NAME': 'zxcvbn_password.ZXCVBNValidator',
-    'OPTIONS': {
-        'min_score': 3,
-        'user_attributes': ('username', 'email', 'first_name', 'last_name')
-    }
-}]
-
-
-ONBOARDING = {
-    'REGISTRATION_OPEN': True,
-    'REGISTRATION_OPEN_SOCIAL': True,
-    'REGISTRATION_OPEN_SAML': True,
-}
+AUTH_USER_MODEL = 'idm_card.User'
 
 
 IDM_BROKER = {
     'CONSUMERS': [{
-        'queues': [kombu.Queue('idm.auth.person',
+        'queues': [kombu.Queue('idm.card.person',
                                exchange=kombu.Exchange('idm.core.person', type='topic', passive=True),
                                routing_key='#')],
-        'tasks': ['idm_auth.auth_core_integration.tasks.process_person_update'],
+        'tasks': ['idm_card.tasks.process_person_update'],
     }],
 }

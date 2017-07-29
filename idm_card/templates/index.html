@@ -3,10 +3,26 @@
 {% block h1_title %}Card Management{% endblock %}
 {% block title %}Card Management{% endblock %}
 
+{% block extra_head %}
+<style>
+    svg {
+        border-radius: 10px; border: 1px solid black;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
+    {% comment %}
     <p style="text-align: center">
 <img src="{% url "card" %}" style="border-radius: 10px; border: 1px solid black;">
 </p>
+{% endcomment %}
+
+    {% for card in request.user.identity.card_set.all %}
+    <p style="text-align: center">
+    {{ card.svg_with_expiry|safe }}
+</p>
+    {% endfor %}
 
 {% endblock %}

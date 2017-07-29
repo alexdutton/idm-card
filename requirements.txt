@@ -6,6 +6,8 @@ psycopg2
 django-reversion
 kombu
 celery
+python-dateutil
+lxml
 six
 requests
 -e git://github.com/alexsdutton/idm-brand.git#egg=idm-brand

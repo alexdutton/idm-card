@@ -1,8 +1,13 @@
+from django.core.exceptions import PermissionDenied
+
 from idm_card.models import Identity
 
 
 def process_userinfo(user, claims):
-    identity = Identity.objects.get(id=claims['identity_id'])
+    try:
+        identity = Identity.objects.get(id=claims['identity_id'])
+    except Identity.DoesNotExist:
+        raise PermissionDenied
+
     user.identity_id = identity.id
-    user.identity_content_type_id = identity.content_type_id
     user.save()
