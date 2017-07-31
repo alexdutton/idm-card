@@ -2,6 +2,7 @@ Django
 Pillow
 djangorestframework
 django-dirtyfields
+django-fsm
 psycopg2
 django-reversion
 kombu

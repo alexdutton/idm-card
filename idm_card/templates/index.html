@@ -1,28 +1,72 @@
-{% extends "base.html" %}
+{% extends "base.html" %}{% load fsm %}
 
 {% block h1_title %}Card Management{% endblock %}
 {% block title %}Card Management{% endblock %}
 
 {% block extra_head %}
-<style>
-    svg {
-        border-radius: 10px; border: 1px solid black;
-    }
-</style>
+    <style>
+        svg {
+            border-radius: 10px; border: 1px solid black;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
 
-    {% comment %}
-    <p style="text-align: center">
-<img src="{% url "card" %}" style="border-radius: 10px; border: 1px solid black;">
-</p>
-{% endcomment %}
+    <table class="pure-table pure-table-bordered">
+        <thead>
+        <tr>
+            <th>Issue</th>
+            <th>Front</th>
+            <th>Back</th>
+            <th>Details</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for card in request.user.identity.card_set.all %}
+            {% with  card.svg_with_expiry as svg %}
+                <tr>
+                    <td>{% if card.state != "potential" %}{{ card.sequence_number }}{% endif %}</td>
+                    <td>{{ svg.front|safe }}</td>
+                    <td>{{ svg.back|safe }}</td>
+                    <td>
+                        <dl>
+                            <dt>State:</dt>
+                            <dd>{{ card.state }}</dd>
+                            <dt>Expiry:</dt>
+                            <dd>{{ card.expiry }}</dd>
+                        </dl>
+                    </td>
+                    <td>
+                        {% with card|available_state_transitions:request.user as available_transitions %}
+                        <form method="post" action="{{ card.get_absolute_url }}">{% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.build_absolute_uri }}">
+                            <div class="pure-button-group" role="group" aria-label="Actions">
+                                {% if "print" in available_transitions %}
+                            <button class="pure-button" type="submit" name="print">Print</button>
+                                {% endif %}
+                                {% if "lost" in available_transitions %}
+                            <button class="pure-button" type="submit" name="lost">Report lost</button>
+                                {% endif %}
+                                {% if "stolen" in available_transitions %}
+                            <button class="pure-button" type="submit" name="stolen">Report stolen</button>
+                                {% endif %}
+                                {% if "collected" in available_transitions %}
+                            <button class="pure-button" type="submit" name="collected">Collected</button>
+                                {% endif %}
+                                {% if "found" in available_transitions %}
+                            <button class="pure-button" type="submit" name="found">Found</button>
+                                {% endif %}
+                                </div>
+                        </form>
+                            {% endwith %}
+                    </td>
+                </tr>
+            {% endwith %}
+        {% endfor %}
 
-    {% for card in request.user.identity.card_set.all %}
-    <p style="text-align: center">
-    {{ card.svg_with_expiry|safe }}
-</p>
-    {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

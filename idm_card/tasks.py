@@ -17,17 +17,21 @@ def process_person_update(body, delivery_info, **kwargs):
     current_card = models.Card.objects \
         .filter(identity_id=identity_id).order_by('-sequence_number').select_for_update().first()
     if not current_card:
-        current_card = models.Card.objects.create(identity_id, sequence_number=1)
+        current_card = models.Card(identity_id=identity_id,
+                                   sequence_number=1,
+                                   state='potential')
 
     previous_svg = current_card.svg
 
-    if current_card.status != 'potential':
+    if current_card.state != 'potential':
         current_card = models.Card(identity_id=identity_id,
-                                   status='potential',
+                                   state='potential',
                                    sequence_number=current_card.sequence_number+1,
                                    card_number=current_card.card_number)
 
-    context = util.get_card_context(body, card_number = current_card.card_number)
+    context = util.get_card_context(body,
+                                    card_number=current_card.card_number,
+                                    sequence_number=current_card.sequence_number)
     current_card.svg = template.render(context)
 
     if current_card.svg == previous_svg and (not current_card.expiry or context['max_expiry'] >= current_card.expiry):

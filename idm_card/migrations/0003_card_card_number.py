@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.SeparateDatabaseAndState(
             database_operations=[
                 migrations.RunSQL(
-                    "ALTER TABLE idm_card_card ADD card_number INTEGER DEFAULT nextval('card_number')",
+                    "ALTER TABLE idm_card_card ADD card_number INTEGER NOT NULL DEFAULT nextval('card_number')",
                     "ALTER TABLE idm_card_card DROP card_number",
                 )
             ],
