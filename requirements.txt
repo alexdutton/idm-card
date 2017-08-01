@@ -12,6 +12,6 @@ lxml
 six
 requests
 -e git://github.com/alexsdutton/idm-brand.git#egg=idm-brand
--e git://github.com/alexsdutton/idm-broker.git#egg=idm-notification
+-e git://github.com/alexsdutton/idm-broker.git#egg=idm-broker
 -e git://github.com/alexsdutton/django-oidc-auth.git#egg=django-oidc-auth
 pyjwkest>=1.3,<1.4
