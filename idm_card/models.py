@@ -1,10 +1,12 @@
+import re
+
 import copy
 import django_fsm
 
+import barcode
 from django.contrib.auth.models import AbstractUser
 from django.db import models, connection
 import lxml.etree
-from django.db.models.expressions import RawSQL
 from django.urls import reverse
 from django.utils.timezone import now
 
@@ -66,6 +68,16 @@ class Card(models.Model):
         xml = lxml.etree.fromstring(self.svg)
         for elem in xml.xpath("//*[@id='expiry']"):
             elem.text = expiry.strftime('%d %b %Y')
+
+        # And the barcode
+        Code39 = barcode.get_barcode_class('code39')
+        for barcode_elem in xml.xpath("//svg:g[@class='barcode']", **XMLNS):
+            code39 = Code39(barcode_elem.attrib['data-barcode']).to_ascii()
+            bar_width = 1.0 / len(code39)
+            for match in re.finditer('X+', code39):
+                lxml.etree.SubElement(barcode_elem, '{http://www.w3.org/2000/svg}rect',
+                                      x='{:.3f}'.format(match.start() * bar_width), y="0",
+                                      width='{:.3f}'.format((match.end() - match.start()) * bar_width), height="1")
 
         front, back = xml, copy.deepcopy(xml)
         front.extend(*front.xpath("//svg:page[@id='front']", **XMLNS))

@@ -48,6 +48,7 @@
                   text-anchor="end"
                   x="84" y="40"
             >{{ card_number }}</text>
+            <g class="barcode" transform="translate(43 42) scale(41 10)" data-barcode="{{ card_number }}"/>
             <text fill="#000000" font-size="2"
                   x="10" y="43"
             >VALID UNTIL</text>
