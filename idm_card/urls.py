@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import logout
+from django.views.generic import TemplateView
 
 from . import views
 
@@ -16,3 +17,6 @@ urlpatterns = [
     url(r'^oidc/', include('oidc_auth.urls')),
     url(r'^logout/$', logout, name='logout'),
 ]
+
+handler_403 = TemplateView(template_name='403.html')
+handler_404 = TemplateView(template_name='404.html')
