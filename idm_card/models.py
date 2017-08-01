@@ -75,11 +75,12 @@ class Card(models.Model):
 
         # Add the mag stripe
         lxml.etree.SubElement(back, '{http://www.w3.org/2000/svg}rect',
-                              x="0mm", y="4mm", width="85.60mm", height="8mm")
+                              x="0", y="4", width="85.60", height="8")
         # And the bit to sign in
         lxml.etree.SubElement(back, '{http://www.w3.org/2000/svg}rect',
                               style="fill: #FFFEEC",
-                              x="5mm", y="17mm", width="75.60mm", height="10mm")
+                              x="5", y="17", width="75.60", height="10")
+
 
         return {
             'front': lxml.etree.tostring(front),

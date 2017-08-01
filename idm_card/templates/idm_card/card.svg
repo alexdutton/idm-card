@@ -1,67 +1,67 @@
 <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="85.60mm" height="53.98mm"
-     style="font-family: DejaVu Sans;">
+     width="85.60mm" height="53.98mm" viewBox="0 0 85.60 53.98"
+     font-family="DejaVu Sans">
     <pageSet>
         <page id="front">
             <rect
-                    style="fill: #ffffff; fill-opacity: 1"
-                    x="0" y="0" width="85.60mm" height="53.98mm"/>
+                    fill="#ffffff" fill-opacity="1"
+                    x="0" y="0" width="85.60" height="53.98"/>
             <rect
-                    style="fill: #002147; fill-opacity: 1"
-                    x="0" y="0" width="85.60mm" height="8mm"/>
+                    fill="#002147" fill-opacity="1"
+                    x="0" y="0" width="85.60" height="8"/>
             <rect
                     style="fill: #63759C; fill-opacity: 1"
-                    x="0mm" y="40mm" width="40mm" height="10mm"/>
+                    x="0" y="40" width="40" height="10"/>
             <rect
-                    style="stroke-width: 0.2mm; stroke: #000000; fill: #ffffff"
-                    x="1mm" y="9mm" width="22mm" height="30mm"/>
+                    style="stroke-width: 0.2; stroke: #000000; fill: #ffffff"
+                    x="1" y="9" width="22" height="30"/>
             {% if bodleian_affiliation %}
-                <image x="54mm" y="15mm" width="25mm" height="22mm" xlink:href="{{ bodleian_logo }}"/>
+                <image x="54" y="15" width="25" height="22" xlink:href="{{ bodleian_logo }}"/>
             {% endif %}
             <text
-                    style="fill: #ffffff; font-size: 6mm; font-family: DejaVu Sans; font-weight: 200"
+                    fill="#ffffff" font-size="6" font-weight="200"
                     text-anchor="middle"
-                    x="42.80mm" y="6mm"
+                    x="42.80" y="6"
             >{% if university_card %}UNIVERSITY OF OXFORD{% elif bodleian_affiliation %}Bodleian Libraries{% endif %}</text>
-            <text style="fill: #000000; font-size: 3.7mm; font-family: DejaVu Sans;"
-                  x="24mm" y="13mm"
+            <text fill="#000000" font-size="3.7"
+                  x="24" y="13"
             >{{ identity.label }}</text>
-            <text style="fill: #000000; font-size: 3.7mm; font-family: DejaVu Sans;"
-                  x="24mm" y="20mm"
+            <text fill="#000000" font-size="3.7"
+                  x="24" y="20"
             >{{ primary_affiliation.type.label|capfirst }}</text>
-            <text style="fill: #000000; font-size: 3mm; font-family: DejaVu Sans;"
-                  x="24mm" y="24mm"
+            <text fill="#000000" font-size="3"
+                  x="24" y="24"
             >{{ primary_affiliation.course.label }}</text>
-            <text style="fill: #000000; font-size: 3.7mm; font-family: DejaVu Sans;"
-                  x="24mm" y="28mm"
+            <text fill="#000000" font-size="3.7"
+                  x="24" y="28"
             >{{ primary_affiliation.organization.label }}</text>
-            <text style="fill: #000000; font-size: 3.7mm; font-family: DejaVu Sans;"
-                  x="24mm" y="35mm"
+            <text fill="#000000" font-size="3.7"
+                  x="24" y="35"
             >{{ primary_affiliation.college.label }}</text>
             {% if student_id %}
-                <text style="fill: #000000; font-size: 3.7mm; font-family: DejaVu Sans;"
-                      x="24mm" y="39mm"
+                <text fill="#000000" font-size="3.7"
+                      x="24" y="39"
                 >{{ student_id }}</text>
             {% endif %}
-            <text style="fill: #000000; font-size: 3.7mm; font-family: DejaVu Sans;"
+            <text fill="#000000" font-size="3.7"
                   text-anchor="end"
-                  x="84mm" y="43mm"
+                  x="84" y="40"
             >{{ card_number }}</text>
-            <text style="fill: #000000; font-size: 2mm;"
-                  x="10mm" y="43mm"
+            <text fill="#000000" font-size="2"
+                  x="10" y="43"
             >VALID UNTIL</text>
-            <text style="fill: #000000; font-size: 3.7mm;"
-                  x="10mm" y="47mm" id="expiry"
+            <text fill="#000000" font-size="3.7"
+                  x="10" y="47" id="expiry"
             >EXPIRY</text>
-            <text style="fill: #000000; font-size: 2mm;"
-                  x="38mm" y="47mm" text-anchor="end"
+            <text fill="#000000" font-size="2"
+                  x="38" y="47" text-anchor="end"
             >{{ sequence_number }}</text>
         </page>
         <page id="back">
-            <text text-anchor="middle" style="font-size:2mm;"
-                    x="42.80mm" y="3mm">PROPERTY OF THE UNIVERSITY OF OXFORD, OX1 2JD</text>
-                <image x="5mm" y="32mm" width="17mm" height="17mm" xlink:href="{{ oxford_logo }}"/>
+            <text text-anchor="middle" fill="#000000" font-size="2"
+                    x="42.80" y="3">PROPERTY OF THE UNIVERSITY OF OXFORD, OX1 2JD</text>
+                <image x="5" y="32" width="17" height="17" xlink:href="{{ oxford_logo }}"/>
         </page>
     </pageSet>
 </svg>
