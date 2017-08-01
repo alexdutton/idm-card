@@ -68,7 +68,7 @@ def get_card_context(identity, card_number, sequence_number):
         if 'unit' not in tags:
             continue
 
-        if affiliation['type_id'].startswith('student:') or affiliation['type_id'].startswith('reader:'):
+        if affiliation['type_id'].startswith('student:') or affiliation['type_id'].startswith('staff:'):
             university_card = True
 
         if not primary_affiliation:
