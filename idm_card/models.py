@@ -69,15 +69,22 @@ class Card(models.Model):
         for elem in xml.xpath("//*[@id='expiry']"):
             elem.text = expiry.strftime('%d %b %Y')
 
-        # And the barcode
+        # Add some barcodes
         Code39 = barcode.get_barcode_class('code39')
         for barcode_elem in xml.xpath("//svg:g[@class='barcode']", **XMLNS):
+            # to_ascii() looks like 'X XXX   X XXX' etc, which correspond to bar widths
+            # By looking for groups of 'X', we can find the positions and widths of bars, which we represent
+            # as svg:rect elements of the appropriate size. We also add a transform, so we can create svg:rects
+            # in whole numbers and then scale them laterally to fit the original svg:g.
             code39 = Code39(barcode_elem.attrib['data-barcode']).to_ascii()
             bar_width = 1.0 / len(code39)
+            barcode_elem.attrib['transform'] = barcode_elem.attrib.get('transform', '') \
+                                               + ' scale({:.6f} 1)'.format(bar_width)
             for match in re.finditer('X+', code39):
                 lxml.etree.SubElement(barcode_elem, '{http://www.w3.org/2000/svg}rect',
-                                      x='{:.3f}'.format(match.start() * bar_width), y="0",
-                                      width='{:.3f}'.format((match.end() - match.start()) * bar_width), height="1")
+                                      x=str(match.start()), y="0",
+                                      width=str(match.end() - match.start()), height="1")
+
 
         front, back = xml, copy.deepcopy(xml)
         front.extend(*front.xpath("//svg:page[@id='front']", **XMLNS))
@@ -92,7 +99,6 @@ class Card(models.Model):
         lxml.etree.SubElement(back, '{http://www.w3.org/2000/svg}rect',
                               style="fill: #FFFEEC",
                               x="5", y="17", width="75.60", height="10")
-
 
         return {
             'front': lxml.etree.tostring(front),
