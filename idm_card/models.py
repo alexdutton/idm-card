@@ -85,7 +85,6 @@ class Card(models.Model):
                                       x=str(match.start()), y="0",
                                       width=str(match.end() - match.start()), height="1")
 
-
         front, back = xml, copy.deepcopy(xml)
         front.extend(*front.xpath("//svg:page[@id='front']", **XMLNS))
         front.remove(front.xpath("//svg:pageSet", **XMLNS)[0])
