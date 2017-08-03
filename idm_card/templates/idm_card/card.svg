@@ -1,68 +1,80 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="85.60mm" height="53.98mm" viewBox="0 0 85.60 53.98"
-     font-family="DejaVu Sans">
-    <pageSet>
-        <page id="front">
-            <rect
-                    fill="#ffffff" fill-opacity="1"
-                    x="0" y="0" width="85.60" height="53.98"/>
-            <rect
-                    fill="#002147" fill-opacity="1"
-                    x="0" y="0" width="85.60" height="8"/>
-            <rect
-                    style="fill: #63759C; fill-opacity: 1"
-                    x="0" y="40" width="40" height="10"/>
-            <rect
-                    style="stroke-width: 0.2; stroke: #000000; fill: #ffffff"
-                    x="1" y="9" width="22" height="30"/>
-            {% if bodleian_affiliation %}
-                <image x="54" y="15" width="25" height="22" xlink:href="{{ bodleian_logo }}"/>
-            {% endif %}
-            <text
-                    fill="#ffffff" font-size="6" font-weight="200"
-                    text-anchor="middle"
-                    x="42.80" y="6"
-            >{% if university_card %}UNIVERSITY OF OXFORD{% elif bodleian_affiliation %}Bodleian Libraries{% endif %}</text>
-            <text fill="#000000" font-size="3.7"
-                  x="24" y="13"
-            >{{ identity.label }}</text>
-            <text fill="#000000" font-size="3.7"
-                  x="24" y="20"
-            >{{ primary_affiliation.type.label|capfirst }}</text>
-            <text fill="#000000" font-size="3"
-                  x="24" y="24"
-            >{{ primary_affiliation.course.label }}</text>
-            <text fill="#000000" font-size="3.7"
-                  x="24" y="28"
-            >{{ primary_affiliation.organization.label }}</text>
-            <text fill="#000000" font-size="3.7"
-                  x="24" y="35"
-            >{{ primary_affiliation.college.label }}</text>
-            {% if student_id %}
+{% spaceless %}
+    <svg xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         width="85.60mm" height="53.98mm" viewBox="0 0 85.60 53.98"
+         font-family="DejaVu Sans">
+        <pageSet>
+            <page id="front">
+                {% comment %}White background{% endcomment %}
+                <rect fill="#ffffff" fill-opacity="1" x="0" y="0" width="85.60" height="53.98"/>
+                {% comment %}Top stripe{% endcomment %}
+                <rect fill="#002147" fill-opacity="1" x="0" y="0" width="85.60" height="8"/>
+                {% comment %}Expiry date background{% endcomment %}
+                <rect style="fill: #63759C; fill-opacity: 1" x="0" y="40" width="40" height="10"/>
+                {% comment %}Border for space where the photo would go{% endcomment %}
+                <rect stroke-width="0.2" stroke="#000000" fill="#ffffff" x="1" y="9" width="22" height="30"/>
+                {% comment %}The Bodleian logo displayed behind the text, if the person has a Bodleian reader affiliation{% endcomment %}
+                {% if bodleian_affiliation %}
+                    <image x="54" y="15" width="25" height="22" xlink:href="{{ bodleian_logo }}"/>
+                {% endif %}
+                <text fill="#ffffff" font-size="6" font-weight="200" text-anchor="middle" x="42.80" y="6">
+                    {% if university_card %}
+                        UNIVERSITY OF OXFORD
+                    {% elif bodleian_affiliation %}
+                        Bodleian Libraries
+                    {% endif %}
+                </text>
+                {% comment %}The person's name{% endcomment %}
                 <text fill="#000000" font-size="3.7"
-                      x="24" y="39"
-                >{{ student_id }}</text>
-            {% endif %}
-            <text fill="#000000" font-size="3.7"
-                  text-anchor="end"
-                  x="84" y="40"
-            >{{ card_number }}</text>
-            <g class="barcode" transform="translate(43 42) scale(41 10)" data-barcode="{{ card_number }}"/>
-            <text fill="#000000" font-size="2"
-                  x="10" y="43"
-            >VALID UNTIL</text>
-            <text fill="#000000" font-size="3.7"
-                  x="10" y="47" id="expiry"
-            >EXPIRY</text>
-            <text fill="#000000" font-size="2"
-                  x="38" y="47" text-anchor="end"
-            >{{ sequence_number }}</text>
-        </page>
-        <page id="back">
-            <text text-anchor="middle" fill="#000000" font-size="2"
-                    x="42.80" y="3">PROPERTY OF THE UNIVERSITY OF OXFORD, OX1 2JD</text>
+                      x="24" y="13"
+                >{{ identity.label }}</text>
+                <text fill="#000000" font-size="3.7"
+                      x="24" y="20">
+                    {% if primary_affiliation.type.id == "student:undergraduate" %}
+                        UNDERGRADUATE reading for
+                    {% elif primary_affiliation.type.id == "student:postgraduate:research" %}
+                        POSTGRADUATE reading for
+                    {% elif primary_affiliation.type.id == "staff:employee" and "university" in primary_affiliation.tags %}
+                        University Staff
+                    {% elif primary_affiliation.type.id == "staff:employee" and "college" in primary_affiliation.tags %}
+                        College Staff
+                    {% elif primary_affiliation.type.id == "staff:employee" and "pph" in primary_affiliation.tags %}
+                        PPH Staff
+                    {% else %}
+                        {{ primary_affiliation.type.label|capfirst }}
+                    {% endif %}
+                </text>
+                <text fill="#000000" font-size="3" x="24" y="24">
+                    {{ primary_affiliation.course.label }}
+                </text>
+                <text fill="#000000" font-size="3.7" x="24" y="28">
+                    {{ primary_affiliation.organization.label }}
+                </text>
+                <text fill="#000000" font-size="3.7" x="24" y="35">
+                    {{ primary_affiliation.college.label }}
+                </text>
+                {% if student_id %}
+                    <text fill="#000000" font-size="3.7" x="24" y="39">
+                        {{ student_id }}
+                    </text>
+                {% endif %}
+                <text fill="#000000" font-size="3.7" text-anchor="end" x="84" y="40">
+                    {{ card_number }}
+                </text>
+                {% comment %}This g#barcode has svg:rects added later to represent the barcode, based on the information in @data-barcode{% endcomment %}
+                <g class="barcode" transform="translate(43 42) scale(41 10)" data-barcode="{{ card_number }}"/>
+                <text fill="#000000" font-size="2" x="10" y="43">VALID UNTIL</text>
+                {% comment %}This element actually has its text content replaced further down the line{% endcomment %}
+                <text fill="#000000" font-size="3.7" x="10" y="47" id="expiry">EXPIRY</text>
+                <text fill="#000000" font-size="2" x="38" y="47" text-anchor="end">{{ sequence_number }}</text>
+            </page>
+            <page id="back">
+                {% comment %}The text at the very top of the back of the card{% endcomment %}
+                <text text-anchor="middle" fill="#000000" font-size="2" x="42.80" y="3">
+                    PROPERTY OF THE UNIVERSITY OF OXFORD, OX1 2JD
+                </text>
                 <image x="5" y="32" width="17" height="17" xlink:href="{{ oxford_logo }}"/>
-        </page>
-    </pageSet>
-</svg>
+            </page>
+        </pageSet>
+    </svg>
+{% endspaceless %}
